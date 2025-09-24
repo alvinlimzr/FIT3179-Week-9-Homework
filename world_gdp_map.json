@@ -20,7 +20,7 @@
       },
       "transform": [
         {
-          "calculate": "datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH",
+          "calculate": "(datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH)",
           "as": "iso3"
         },
         {
@@ -31,7 +31,7 @@
             "fields": ["Country Name", "2024"]
           }
         },
-        { "calculate": "datum['2024']", "as": "gdp_pc" }
+        { "calculate": "(datum['2024'] && datum['2024'] > 0) ? datum['2024'] : null", "as": "gdp_pc" }
       ],
       "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
       "encoding": {
@@ -39,7 +39,7 @@
           "field": "gdp_pc",
           "type": "quantitative",
           "title": "GDP per capita (USD, 2024)",
-          "scale": { "type": "log", "clamp": true, "scheme": "ylgnbu" }
+          "scale": { "type": "log", "clamp": true, "scheme": "blues" }
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
@@ -56,7 +56,7 @@
       },
       "transform": [
         {
-          "calculate": "datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH",
+          "calculate": "(datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH)",
           "as": "iso3"
         },
         {
@@ -67,7 +67,7 @@
             "fields": ["2024"]
           }
         },
-        { "calculate": "datum['2024']", "as": "gdp_pc" },
+        { "calculate": "(datum['2024'] && datum['2024'] > 0) ? datum['2024'] : null", "as": "gdp_pc" },
         { "filter": "datum.gdp_pc == null" }
       ],
       "mark": { "type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3 }
