@@ -21,19 +21,25 @@
       "transform": [
         {
           "calculate": "(datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH)",
-          "as": "iso3"
+          "as": "iso3_raw"
         },
+        { "calculate": "upper(trim(datum.iso3_raw))", "as": "iso3_key" },
+
         {
-          "lookup": "iso3",
+          "lookup": "iso3_key",
           "from": {
             "data": {
               "url": "data/gdp_pc_cleaned.csv",
               "format": { "type": "csv", "parse": { "2024": "number" } }
             },
-            "key": "Country Code",
-            "fields": ["Country Name", "2024"]
+            "key": "join_key",
+            "fields": ["Country Name", "2024"],
+            "transform": [
+              { "calculate": "upper(trim(datum['Country Code']))", "as": "join_key" }
+            ]
           }
         },
+
         { "calculate": "(datum['2024'] && datum['2024'] > 0) ? datum['2024'] : null", "as": "gdp_pc" }
       ],
       "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
@@ -46,7 +52,7 @@
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
-          { "field": "iso3", "title": "ISO3" },
+          { "field": "iso3_key", "title": "ISO3" },
           { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
         ]
       }
@@ -60,19 +66,25 @@
       "transform": [
         {
           "calculate": "(datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH)",
-          "as": "iso3"
+          "as": "iso3_raw"
         },
+        { "calculate": "upper(trim(datum.iso3_raw))", "as": "iso3_key" },
+
         {
-          "lookup": "iso3",
+          "lookup": "iso3_key",
           "from": {
             "data": {
               "url": "data/gdp_pc_cleaned.csv",
               "format": { "type": "csv", "parse": { "2024": "number" } }
             },
-            "key": "Country Code",
-            "fields": ["2024"]
+            "key": "join_key",
+            "fields": ["2024"],
+            "transform": [
+              { "calculate": "upper(trim(datum['Country Code']))", "as": "join_key" }
+            ]
           }
         },
+
         { "calculate": "(datum['2024'] && datum['2024'] > 0) ? datum['2024'] : null", "as": "gdp_pc" },
         { "filter": "datum.gdp_pc == null" }
       ],
