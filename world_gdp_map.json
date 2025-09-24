@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 960,
-  "height": 520,
+  "width": 1100,
+  "height": 620,
   "background": "white",
   "config": { "view": { "stroke": null } },
   "projection": { "type": "equalEarth" },
@@ -14,27 +14,26 @@
       "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 } },
 
     {
-      "data": {
-        "url": "data/ne_countries.json",
-        "format": { "type": "topojson", "feature": "ne_countries" }
-      },
+      "data": { "url": "data/ne_countries.json",
+                "format": { "type": "topojson", "feature": "ne_countries" } },
       "transform": [
         {
-          "calculate": "upper(trim(datum.id || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
-          "as": "iso3_key"
+          "calculate":
+            "upper(trim(datum.id || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "as": "iso3"
         },
         {
-          "lookup": "iso3_key",
+          "lookup": "iso3",
           "from": {
             "data": {
               "url": "data/gdp_pc_cleaned.csv",
-              "format": { "type": "csv", "parse": { "2024": "number" } }
+              "format": { "type": "csv", "parse": { "gdp_pc_2024": "number" } }
             },
             "key": "Country Code",
-            "fields": ["Country Name", "2024"]
+            "fields": ["Country Name", "gdp_pc_2024"]
           }
         },
-        { "calculate": "(datum['2024'] && datum['2024'] > 0) ? datum['2024'] : null", "as": "gdp_pc" }
+        { "calculate": "(datum.gdp_pc_2024 && datum.gdp_pc_2024 > 0) ? datum.gdp_pc_2024 : null", "as": "gdp_pc" }
       ],
       "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
       "encoding": {
@@ -46,34 +45,33 @@
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
-          { "field": "iso3_key", "title": "ISO3" },
+          { "field": "iso3", "title": "ISO3" },
           { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
         ]
       }
     },
 
     {
-      "data": {
-        "url": "data/ne_countries.json",
-        "format": { "type": "topojson", "feature": "ne_countries" }
-      },
+      "data": { "url": "data/ne_countries.json",
+                "format": { "type": "topojson", "feature": "ne_countries" } },
       "transform": [
         {
-          "calculate": "upper(trim(datum.id || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
-          "as": "iso3_key"
+          "calculate":
+            "upper(trim(datum.id || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "as": "iso3"
         },
         {
-          "lookup": "iso3_key",
+          "lookup": "iso3",
           "from": {
             "data": {
               "url": "data/gdp_pc_cleaned.csv",
-              "format": { "type": "csv", "parse": { "2024": "number" } }
+              "format": { "type": "csv", "parse": { "gdp_pc_2024": "number" } }
             },
             "key": "Country Code",
-            "fields": ["2024"]
+            "fields": ["gdp_pc_2024"]
           }
         },
-        { "calculate": "(datum['2024'] && datum['2024'] > 0) ? datum['2024'] : null", "as": "gdp_pc" },
+        { "calculate": "(datum.gdp_pc_2024 && datum.gdp_pc_2024 > 0) ? datum.gdp_pc_2024 : null", "as": "gdp_pc" },
         { "filter": "datum.gdp_pc == null" }
       ],
       "mark": { "type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3 }
