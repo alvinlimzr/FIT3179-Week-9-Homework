@@ -19,7 +19,11 @@
         "format": { "type": "topojson", "feature": "ne_countries" }
       },
       "transform": [
-        { "calculate": "datum.properties.ADM0_A3 ?? datum.properties.ISO_A3 ?? datum.properties.ISO_A3_EH", "as": "iso3" },
+        {
+          "calculate":
+            "datum.properties.ADM0_A3 ? datum.properties.ADM0_A3 : (datum.properties.ISO_A3 ? datum.properties.ISO_A3 : datum.properties.ISO_A3_EH)",
+          "as": "iso3"
+        },
         {
           "lookup": "iso3",
           "from": {
@@ -36,7 +40,7 @@
           "field": "gdp_pc",
           "type": "quantitative",
           "title": "GDP per capita (USD, 2024)",
-          "scale": { "scheme": "ylgnbu", "type": "log", "clamp": true }
+          "scale": { "type": "log", "clamp": true, "scheme": "ylgnbu" }
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
@@ -52,7 +56,11 @@
         "format": { "type": "topojson", "feature": "ne_countries" }
       },
       "transform": [
-        { "calculate": "datum.properties.ADM0_A3 ?? datum.properties.ISO_A3 ?? datum.properties.ISO_A3_EH", "as": "iso3" },
+        {
+          "calculate":
+            "datum.properties.ADM0_A3 ? datum.properties.ADM0_A3 : (datum.properties.ISO_A3 ? datum.properties.ISO_A3 : datum.properties.ISO_A3_EH)",
+          "as": "iso3"
+        },
         {
           "lookup": "iso3",
           "from": {
