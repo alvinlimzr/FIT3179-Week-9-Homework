@@ -28,7 +28,7 @@
           "from": {
             "data": {
               "url": "data/gdp_pc_cleaned.csv",
-              "format": { "type": "csv", "parse": {"2024": "number"} }
+              "format": { "type": "csv", "parse": { "2024": "number" } }
             },
             "key": "Country Code",
             "fields": ["Country Name", "2024"]
@@ -67,7 +67,7 @@
           "from": {
             "data": {
               "url": "data/gdp_pc_cleaned.csv",
-              "format": { "type": "csv", "parse": {"2024": "number"} }
+              "format": { "type": "csv", "parse": { "2024": "number" } }
             },
             "key": "Country Code",
             "fields": ["2024"]
