@@ -20,8 +20,7 @@
       },
       "transform": [
         {
-          "calculate":
-            "datum.properties.ADM0_A3 ? datum.properties.ADM0_A3 : (datum.properties.ISO_A3 ? datum.properties.ISO_A3 : datum.properties.ISO_A3_EH)",
+          "calculate": "datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH",
           "as": "iso3"
         },
         {
@@ -57,8 +56,7 @@
       },
       "transform": [
         {
-          "calculate":
-            "datum.properties.ADM0_A3 ? datum.properties.ADM0_A3 : (datum.properties.ISO_A3 ? datum.properties.ISO_A3 : datum.properties.ISO_A3_EH)",
+          "calculate": "datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH",
           "as": "iso3"
         },
         {
