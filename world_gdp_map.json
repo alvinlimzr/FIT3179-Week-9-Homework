@@ -8,14 +8,10 @@
   "title": { "text": "World GDP per capita (USD), 2024", "anchor": "start" },
 
   "layer": [
-    {
-      "data": { "sphere": {} },
-      "mark": { "type": "geoshape", "fill": "#e8f4fb" }
-    },
-    {
-      "data": { "graticule": { "step": [30, 30] } },
-      "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
-    },
+    { "data": { "sphere": {} }, "mark": { "type": "geoshape", "fill": "#e8f4fb" } },
+
+    { "data": { "graticule": { "step": [30, 30] } },
+      "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 } },
 
     {
       "data": {
@@ -27,15 +23,12 @@
         {
           "lookup": "iso3",
           "from": {
-            "data": { "url": "data/gdp_pc_cleaned.csv" },
+            "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
-            "fields": ["Country Name", "gdp_pc_2024", "2024", "GDP_per_capita", "value"]
+            "fields": ["Country Name", "2024"]
           }
         },
-        {
-          "calculate": "isValid(datum.gdp_pc_2024) ? datum.gdp_pc_2024 : (isValid(datum['2024']) ? datum['2024'] : (isValid(datum.GDP_per_capita) ? datum.GDP_per_capita : datum.value))",
-          "as": "gdp_pc"
-        }
+        { "calculate": "datum['2024']", "as": "gdp_pc" }
       ],
       "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
       "encoding": {
@@ -63,15 +56,12 @@
         {
           "lookup": "iso3",
           "from": {
-            "data": { "url": "data/gdp_pc_cleaned.csv" },
+            "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
-            "fields": ["gdp_pc_2024", "2024", "GDP_per_capita", "value"]
+            "fields": ["2024"]
           }
         },
-        {
-          "calculate": "isValid(datum.gdp_pc_2024) ? datum.gdp_pc_2024 : (isValid(datum['2024']) ? datum['2024'] : (isValid(datum.GDP_per_capita) ? datum.GDP_per_capita : datum.value))",
-          "as": "gdp_pc"
-        },
+        { "calculate": "datum['2024']", "as": "gdp_pc" },
         { "filter": "datum.gdp_pc == null" }
       ],
       "mark": { "type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3 }
