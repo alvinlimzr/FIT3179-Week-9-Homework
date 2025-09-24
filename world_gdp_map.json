@@ -1,36 +1,77 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FIT3179 Week 9 Map — GDP per capita</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.5; margin: 0 auto; max-width: 1280px; padding: 1rem 1.25rem;
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 620,
+  "autosize": { "type": "fit", "contains": "padding" },
+  "background": "white",
+  "config": { "view": { "stroke": null } },
+  "projection": { "type": "equalEarth" },
+  "title": { "text": "World GDP per capita (USD), 2024", "anchor": "start" },
+
+  "layer": [
+    { "data": { "sphere": {} }, "mark": { "type": "geoshape", "fill": "#e8f4fb" } },
+
+    { "data": { "graticule": { "step": [30, 30] } },
+      "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 } },
+
+    {
+      "data": { "url": "data/ne_countries.json", "format": { "type": "topojson", "feature": "ne_countries" } },
+      "transform": [
+        {
+          "calculate": "upper(trim(datum.id || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "as": "iso3"
+        },
+        {
+          "lookup": "iso3",
+          "from": {
+            "data": {
+              "url": "data/gdp_pc_cleaned.csv",
+              "format": { "type": "csv", "parse": { "gdp_pc_2024": "number" } }
+            },
+            "key": "Country Code",
+            "fields": ["Country Name", "gdp_pc_2024"]
+          }
+        },
+        { "calculate": "(datum.gdp_pc_2024 && datum.gdp_pc_2024 > 0) ? datum.gdp_pc_2024 : null", "as": "gdp_pc" }
+      ],
+      "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
+      "encoding": {
+        "color": {
+          "field": "gdp_pc",
+          "type": "quantitative",
+          "title": "GDP per capita (USD, 2024)",
+          "scale": { "type": "log", "clamp": true, "scheme": "blues" }
+        },
+        "tooltip": [
+          { "field": "Country Name", "title": "Country" },
+          { "field": "iso3", "title": "ISO3" },
+          { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
+        ]
+      }
+    },
+
+    {
+      "data": { "url": "data/ne_countries.json", "format": { "type": "topojson", "feature": "ne_countries" } },
+      "transform": [
+        {
+          "calculate": "upper(trim(datum.id || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "as": "iso3"
+        },
+        {
+          "lookup": "iso3",
+          "from": {
+            "data": {
+              "url": "data/gdp_pc_cleaned.csv",
+              "format": { "type": "csv", "parse": { "gdp_pc_2024": "number" } }
+            },
+            "key": "Country Code",
+            "fields": ["gdp_pc_2024"]
+          }
+        },
+        { "calculate": "(datum.gdp_pc_2024 && datum.gdp_pc_2024 > 0) ? datum.gdp_pc_2024 : null", "as": "gdp_pc" },
+        { "filter": "datum.gdp_pc == null" }
+      ],
+      "mark": { "type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3 }
     }
-    h1 { margin: 0.25rem 0 0.75rem; }
-    figure { margin: 0; }
-    figcaption { color: #555; font-size: 0.95rem; margin-top: 0.5rem; }
-    /* Make the container stretch across the available width */
-    #vis { width: 100%; }
-  </style>
-</head>
-<body>
-  <h1>World GDP per capita (2024)</h1>
-  <p>This choropleth uses a log colour scale to show GDP per capita by country. Source: add your dataset source. Author: Alvin Lim</p>
-
-  <figure>
-    <div id="vis"></div>
-    <figcaption>Equal Earth projection; graticule every 30°. Missing data shown in grey.</figcaption>
-  </figure>
-
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-  <script>
-    // bump the version when you change world_gdp_map.json to bypass caches
-    vegaEmbed("#vis", "world_gdp_map.json?v=31", { actions: false }).catch(console.error);
-  </script>
-</body>
-</html>
+  ]
+}
